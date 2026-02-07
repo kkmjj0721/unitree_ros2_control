@@ -1,6 +1,6 @@
 #include <unistd.h>
-#include "serialPort/SerialPort.h"
-#include "unitreeMotor/unitreeMotor.h"
+#include "unitree_actuator_sdk/serialPort/SerialPort.h"
+#include "unitree_actuator_sdk/unitreeMotor/unitreeMotor.h"
 
 
 int main(int argc,char** argv) 

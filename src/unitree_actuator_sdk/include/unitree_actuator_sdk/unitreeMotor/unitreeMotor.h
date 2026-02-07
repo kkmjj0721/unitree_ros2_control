@@ -13,9 +13,9 @@ enum class MotorType{
 };
 
 enum class MotorMode{
-    BRAKE, 
-    FOC, 
-    CALIBRATE
+    BRAKE,                  // 停止
+    FOC,                    // FOC
+    CALIBRATE               // 校准
 };
 
 struct MotorCmd{

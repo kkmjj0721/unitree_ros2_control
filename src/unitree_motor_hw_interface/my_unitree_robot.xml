@@ -1,0 +1,9 @@
+<library path="unitree_motor_hw_interface">
+  <class name="unitree_hardware/UnitreeHardwareInterface"
+         type="unitree_hardware::UnitreeHardwareInterface"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Unitree Robot Hardware Interface for ROS 2 Control
+    </description>
+  </class>
+</library>

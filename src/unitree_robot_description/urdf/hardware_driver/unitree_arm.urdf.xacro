@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="unitree_arm">
+
+    <xacro:include filename="../unitree_arm_description.xacro" />
+    <xacro:include filename="unitree_arm_ros2_control.xacro" />
+
+    <!--生成物理模型-->
+    <xacro:unitree_arm_description />
+    
+    <!--配置硬件接口-->
+    <xacro:unitree_arm_ros2_control name="UnitreeSystem" serial_port="/dev/ttyUSB0" />
+
+</robot>

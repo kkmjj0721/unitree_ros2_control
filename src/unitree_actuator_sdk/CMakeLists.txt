@@ -27,7 +27,7 @@ install(DIRECTORY include/
 )
 
 # 4. 导出依赖
-ament_export_include_directories(include)
+ament_export_include_directories(include include/unitree_actuator_sdk)
 
 # 直接导出库的名字（链接时会自动去 lib 目录下找 libunitree_actuator_sdk.so）
 ament_export_libraries(unitree_actuator_sdk) 

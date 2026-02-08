@@ -34,11 +34,32 @@ ament_target_dependencies(${PROJECT_NAME}
 # 3、导出插件描述文件
 pluginlib_export_plugin_description_file(
 hardware_interface 
-unitree_motor_hw_interface.xml
+my_unitree_robot.xml
 )
 
 # 4、安装库和文件
+install(TARGETS ${PROJECT_NAME}
+  DESTINATION lib
+)
 
+install(DIRECTORY include/
+  DESTINATION include
+)
 
+install(FILES my_unitree_robot.xml
+  DESTINATION share/${PROJECT_NAME}
+)
+
+# 5、导出依赖
+ament_export_libraries(
+  ${PROJECT_NAME}
+)
+
+ament_export_dependencies(
+  rclcpp
+  rclcpp_lifecycle
+  hardware_interface
+  pluginlib
+)
 
 ament_package()

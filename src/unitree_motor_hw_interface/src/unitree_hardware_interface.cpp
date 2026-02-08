@@ -58,6 +58,9 @@ hardware_interface::CallbackReturn UnitreeHardwareInterface::on_init
         motor_cmd_vec_[i].motorType = MotorType::GO_M8010_6;       
     }
 
+    // 获取减速比
+    gear_ratios_ = queryGearRatio(MotorType::GO_M8010_6);
+
     return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -104,9 +107,9 @@ hardware_interface::CallbackReturn UnitreeHardwareInterface::on_activate
         {
              for(size_t i=0; i<motor_ids_.size(); i++) 
              {
-                 joint_pos_states_[i] = motor_data_vec_[i].q;
-                 joint_vel_states_[i] = motor_data_vec_[i].dq;
-                 joint_tau_states_[i] = motor_data_vec_[i].tau;
+                 joint_pos_states_[i] = motor_data_vec_[i].q / gear_ratios_;
+                 joint_vel_states_[i] = motor_data_vec_[i].dq / gear_ratios_;
+                 joint_tau_states_[i] = motor_data_vec_[i].tau * gear_ratios_;
                  
                  joint_pos_commands_[i] = joint_pos_states_[i];
                  joint_vel_commands_[i] = 0.0;
@@ -135,12 +138,21 @@ hardware_interface::CallbackReturn UnitreeHardwareInterface::on_deactivate
 (const rclcpp_lifecycle::State & /*previous_state*/)
 {
     RCLCPP_INFO(rclcpp::get_logger("UnitreeHardwareInterface"), "Deactivating motors (Brake)...");
+
     for (size_t i = 0; i < motor_ids_.size(); i++) 
     {
         motor_cmd_vec_[i].mode = queryMotorMode(MotorType::GO_M8010_6, MotorMode::BRAKE);
+        // 【新增】安全清零：确保刹车时不带有残留的力矩或速度指令
+        motor_cmd_vec_[i].tau = 0.0;
+        motor_cmd_vec_[i].dq = 0.0;
+        motor_cmd_vec_[i].kp = 0.0;
+        motor_cmd_vec_[i].kd = 0.0;
     }
-    // 发送刹车指令
-    serial_ptr_->sendRecv(motor_cmd_vec_, motor_data_vec_);
+    try 
+    {
+        serial_ptr_->sendRecv(motor_cmd_vec_, motor_data_vec_);
+    } 
+    catch (...) {}
 
     return hardware_interface::CallbackReturn::SUCCESS;
 } 
@@ -169,7 +181,7 @@ hardware_interface::return_type UnitreeHardwareInterface::write
         if (std::isnan(joint_pos_commands_[i])) 
         {
             // 如果指令无效，保持当前位置，并且刚度设为0（阻尼模式）
-            motor_cmd_vec_[i].q = joint_pos_states_[i]; 
+            motor_cmd_vec_[i].q = joint_pos_states_[i] * gear_ratios_; 
             motor_cmd_vec_[i].kp = 0.0;
             motor_cmd_vec_[i].kd = 0.5; // 给一点阻尼防止自由摆动
             motor_cmd_vec_[i].dq = 0.0;
@@ -177,9 +189,9 @@ hardware_interface::return_type UnitreeHardwareInterface::write
         } 
         else 
         {
-            motor_cmd_vec_[i].q = joint_pos_commands_[i];
-            motor_cmd_vec_[i].dq = joint_vel_commands_[i];
-            motor_cmd_vec_[i].tau = joint_tau_commands_[i];
+            motor_cmd_vec_[i].q = joint_pos_commands_[i] * gear_ratios_;
+            motor_cmd_vec_[i].dq = joint_vel_commands_[i] * gear_ratios_;
+            motor_cmd_vec_[i].tau = joint_tau_commands_[i] / gear_ratios_;
             
             // --- 安全性检查 2: 默认刚度 ---
             // 如果上层 Controller (如 JointTrajectoryController) 没有下发 kp/kd，默认为 0，电机不会动。
@@ -233,9 +245,9 @@ hardware_interface::return_type UnitreeHardwareInterface::write
                 "Motor %d Error: %d (Temp: %d)", motor_ids_[i], motor_data_vec_[i].merror, motor_data_vec_[i].temp);
         }
 
-        joint_pos_states_[i] = motor_data_vec_[i].q;
-        joint_vel_states_[i] = motor_data_vec_[i].dq;
-        joint_tau_states_[i] = motor_data_vec_[i].tau;
+        joint_pos_states_[i] = motor_data_vec_[i].q / gear_ratios_;
+        joint_vel_states_[i] = motor_data_vec_[i].dq / gear_ratios_;
+        joint_tau_states_[i] = motor_data_vec_[i].tau * gear_ratios_;
     }
 
     return hardware_interface::return_type::OK;

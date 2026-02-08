@@ -47,7 +47,7 @@ private:
     std::vector<unsigned short> motor_ids_;
     std::vector<MotorCmd> motor_cmd_vec_;
     std::vector<MotorData> motor_data_vec_;
-    std::vector<double> gear_ratios_;               // 减速比
+    float gear_ratios_;                                // 减速比
     
     // ros2_control
     std::vector<double> joint_vel_commands_;

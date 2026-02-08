@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="mock_arm_ros2_control" params="name">
+
+        <ros2_control name="${name}" type="system">
+            
+            <!--该模拟组件没有kp和kd，仅有标准的输入输出（位置，速度，力矩）-->
+            <hardware>
+                <plugin>mock_components/GenericSystem</plugin>
+            </hardware>
+
+            <joint name="joint1">
+                <command_interface name="position"/>
+                <command_interface name="velocity"/>
+                <command_interface name="effort"/>
+                
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            
+            <joint name="joint2">
+                <command_interface name="position"/>
+                <command_interface name="velocity"/>
+                <command_interface name="effort"/>
+
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+                <state_interface name="effort"/>
+            </joint>
+            
+        </ros2_control>
+
+    </xacro:macro>
+
+</robot>

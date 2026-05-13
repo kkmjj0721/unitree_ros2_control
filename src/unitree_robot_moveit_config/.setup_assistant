@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: unitree_robot_description
+    relative_path: urdf/hardware_driver/unitree_arm.urdf.xacro
+  srdf:
+    relative_path: config/unitree_arm.srdf
+  package_settings:
+    author_name: Aira
+    author_email: 2171670754@qq.com
+    generated_timestamp: 1778664453
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

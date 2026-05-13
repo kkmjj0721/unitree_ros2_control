@@ -15,6 +15,7 @@
 
     <xacro:property name="link3_length" value="0.15"/>
     <xacro:property name="link3_radius" value="0.02"/>
+    <xacro:property name="link3_tip_sphere_radius" value="0.01"/>
 
     <material name="grey">
         <color rgba="0.7 0.7 0.7 1.0"/>
@@ -133,6 +134,37 @@
             <xacro:inertial_cylinder mass="0.3" length="${link3_length}" radius="${link3_radius}">
                 <origin xyz="0 0 ${link3_length/2}" rpy="0 0 0"/>
             </xacro:inertial_cylinder>
+        </link>
+
+        <joint name="link3_tip_fixed_joint" type="fixed">
+            <parent link="link3"/>
+            <child link="link3_tip_sphere"/>
+            <origin xyz="0 0 ${link3_length}" rpy="0 0 0"/>
+        </joint>
+
+        <link name="link3_tip_sphere">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <sphere radius="${link3_tip_sphere_radius}"/>
+                </geometry>
+                <material name="blue"/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <sphere radius="${link3_tip_sphere_radius}"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="0.05"/>
+                <inertia ixx="${(2.0/5.0) * 0.05 * link3_tip_sphere_radius * link3_tip_sphere_radius}"
+                         ixy="0.0" ixz="0.0"
+                         iyy="${(2.0/5.0) * 0.05 * link3_tip_sphere_radius * link3_tip_sphere_radius}"
+                         iyz="0.0"
+                         izz="${(2.0/5.0) * 0.05 * link3_tip_sphere_radius * link3_tip_sphere_radius}"/>
+            </inertial>
         </link>
 
     </xacro:macro>

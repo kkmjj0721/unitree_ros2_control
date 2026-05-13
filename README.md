@@ -1,15 +1,31 @@
 # unitree_ros2_control
-基于宇树电机的ros2_control
+基于宇树电机的 ros2_control+moveit2 的三自由度机械臂
 
-使用方法：
 
-- 编译：（不要进入src目录）
-
+## Build and source the workspace:
   ```
   colcon build
   source install/setup.bash
   ```
 
+
+## Usage:
+- 测试电机：（注意修改文件内的电机 id，默认为 0）
+
+  ```
+  sudo chmod 777 dev/ttyUSB*
+  ros2 run unitree_actuator_sdk test_unitree_motor
+  ```
+
+- 修改电机 id：
+
+  ```
+  cd UNITREE_ROS2_CONTROL/motor_tools/根据自己主机版本选择对应文件夹
+  sudo ./swboot /dev/ttyUSB0
+  sudo ./changed /dev/ttyUSB0 当前id 目标id
+  sudo ./swmotor /dev/ttyUSB0
+  ```
+  
 - 检查模型：
 
   ```
@@ -22,9 +38,5 @@
   ros2 launch unitree_bringup unitree_mock.launch.py
   ```
 
-- 测试电机：（注意把电机 id 改为0）
 
-  ```
-  sudo chmod 777 dev/ttyUSB*
-  ros2 run unitree_actuator_sdk test_unitree_motor
-  ```
+

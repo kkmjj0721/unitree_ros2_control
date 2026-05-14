@@ -1,17 +1,29 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:macro name="unitree_arm_ros2_control" params="name serial_port">
+    <xacro:arg name="serial_baud_rate" default="4000000" />
+    <xacro:arg name="motor_type" default="GO_M8010_6" />
+    <xacro:arg name="startup_retry_count" default="3" />
+    <xacro:arg name="joint1_motor_id" default="0" />
+    <xacro:arg name="joint2_motor_id" default="1" />
+    <xacro:arg name="joint3_motor_id" default="2" />
+
+    <xacro:macro name="unitree_arm_ros2_control" params="name serial_port default_kp:=0.5 default_kd:=0.02 serial_baud_rate:=$(arg serial_baud_rate) motor_type:=$(arg motor_type) startup_retry_count:=$(arg startup_retry_count) joint1_motor_id:=$(arg joint1_motor_id) joint2_motor_id:=$(arg joint2_motor_id) joint3_motor_id:=$(arg joint3_motor_id)">
 
         <ros2_control name="${name}" type="system">
 
             <hardware>
                 <plugin>unitree_hardware/UnitreeHardwareInterface</plugin>
                 <param name="serial_port">${serial_port}</param>
+                <param name="serial_baud_rate">${serial_baud_rate}</param>
+                <param name="motor_type">${motor_type}</param>
+                <param name="startup_retry_count">${startup_retry_count}</param>
+                <param name="default_kp">${default_kp}</param>
+                <param name="default_kd">${default_kd}</param>
             </hardware>
 
             <joint name="joint1">
-                <param name="motor_id">0</param>
+                <param name="motor_id">${joint1_motor_id}</param>
                 <command_interface name="position"/>
                 <command_interface name="velocity"/>
                 <command_interface name="effort"/>
@@ -22,7 +34,7 @@
             </joint>
 
             <joint name="joint2">
-                <param name="motor_id">1</param>
+                <param name="motor_id">${joint2_motor_id}</param>
                 <command_interface name="position"/>
                 <command_interface name="velocity"/>
                 <command_interface name="effort"/>
@@ -33,7 +45,7 @@
             </joint>
 
             <joint name="joint3">
-                <param name="motor_id">2</param>
+                <param name="motor_id">${joint3_motor_id}</param>
                 <command_interface name="position"/>
                 <command_interface name="velocity"/>
                 <command_interface name="effort"/>

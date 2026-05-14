@@ -3,20 +3,31 @@
 <package format="3">
   <name>my_controller</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Minimal ros2_control trajectory controller and MoveIt operator for the Unitree arm.</description>
   <maintainer email="2171670754@qq.com">kk</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>rclcpp</depend>
+  <depend>control_msgs</depend>
   <depend>controller_interface</depend>
+  <depend>geometry_msgs</depend>
   <depend>hardware_interface</depend>
+  <depend>moveit_msgs</depend>
+  <depend>moveit_ros_planning_interface</depend>
   <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>trajectory_msgs</depend>
+
+  <exec_depend>rclpy</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
+  <test_depend>ament_cmake_pytest</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

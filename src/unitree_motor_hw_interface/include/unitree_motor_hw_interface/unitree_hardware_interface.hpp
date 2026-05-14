@@ -2,6 +2,11 @@
 #define UNITREE_HARDWARE_INTERFACE_HPP
 
 
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "hardware_interface/system_interface.hpp"
 
 #include "rclcpp/rclcpp.hpp"
@@ -39,16 +44,19 @@ public:
 private:
     // 端口和设备名称
     std::string serial_port_name_;
+    uint32_t serial_baud_rate_ = 4000000;
 
     // driver
     std::shared_ptr<SerialPort> serial_ptr_;
 
     // motor
+    MotorType motor_type_ = MotorType::GO_M8010_6;
+    int startup_retry_count_ = 3;
     std::vector<unsigned short> motor_ids_;
     std::vector<MotorCmd> motor_cmd_vec_;
     std::vector<MotorData> motor_data_vec_;
-    double motor_kp;
-    double motor_kd;
+    double default_kp_ = 1.0;
+    double default_kd_ = 0.02;
     float gear_ratios_;                                // 减速比
     
     // ros2_control

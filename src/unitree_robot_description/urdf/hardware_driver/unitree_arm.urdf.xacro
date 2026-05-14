@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="unitree_arm">
 
+    <xacro:arg name="serial_port" default="/dev/ttyUSB0" />
+    <xacro:arg name="default_kp" default="0.5" />
+    <xacro:arg name="default_kd" default="0.02" />
+
     <xacro:include filename="../unitree_arm_description.xacro" />
     <xacro:include filename="unitree_arm_ros2_control.xacro" />
 
@@ -8,6 +12,10 @@
     <xacro:unitree_arm_description />
     
     <!--配置硬件接口-->
-    <xacro:unitree_arm_ros2_control name="UnitreeSystem" serial_port="/dev/ttyUSB0" />
+    <xacro:unitree_arm_ros2_control
+        name="UnitreeSystem"
+        serial_port="$(arg serial_port)"
+        default_kp="$(arg default_kp)"
+        default_kd="$(arg default_kd)" />
 
 </robot>

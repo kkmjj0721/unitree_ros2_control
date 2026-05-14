@@ -1,21 +1,30 @@
 #include <unistd.h>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+
 #include "unitree_actuator_sdk/serialPort/SerialPort.h"
 #include "unitree_actuator_sdk/unitreeMotor/unitreeMotor.h"
 
 
 int main(int argc,char** argv) 
 {
+  const std::string serial_port = argc > 1 ? argv[1] : "/dev/ttyUSB0";
+  const int motor_id = argc > 2 ? std::atoi(argv[2]) : 0;
 
-  SerialPort  serial("/dev/ttyUSB0");
+  SerialPort  serial(serial_port);
   MotorCmd    cmd;
   MotorData   data;
+
+  std::cout << "Testing Unitree motor id=" << motor_id
+            << " on " << serial_port << std::endl;
 
   while(true) 
   {
     cmd.motorType = MotorType::GO_M8010_6;
     data.motorType = MotorType::GO_M8010_6;
     cmd.mode = queryMotorMode(MotorType::GO_M8010_6,MotorMode::FOC);
-    cmd.id   = 0;                                                         // id
+    cmd.id   = motor_id;                                                  // id
     cmd.kp   = 0.0;                                                       // p
     cmd.kd   = 0.01;                                                      // d
     cmd.q    = 0.0;                                                       // pos

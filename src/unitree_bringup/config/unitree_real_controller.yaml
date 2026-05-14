@@ -1,0 +1,30 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    arm_controller:
+      type: my_controller/MyController
+
+arm_controller:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+      - joint3
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+    min_positions:
+      - -3.14
+      - -2.0
+      - -2.0
+    max_positions:
+      - 3.14
+      - 2.0
+      - 2.0
+    start_tolerance: 0.05
+    max_segment_delta: 0.25
